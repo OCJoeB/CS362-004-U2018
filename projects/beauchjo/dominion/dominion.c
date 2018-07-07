@@ -647,7 +647,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 {
   int i;
   int j;
-  int k;
+//  int k;
   int x;
   int index;
   int currentPlayer = whoseTurn(state);
@@ -655,9 +655,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
   int tributeRevealedCards[2] = {-1, -1};
   int temphand[MAX_HAND];// moved above the if statement
-  int drawntreasure=0;
-  int cardDrawn;
-  int z = 0;// this is the counter for the temp hand
+//  int drawntreasure=0;
+//  int cardDrawn;
+//  int z = 0;// this is the counter for the temp hand
   if (nextPlayer > (state->numPlayers - 1)){
     nextPlayer = 0;
   }
@@ -667,6 +667,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
+
+      printf("About to launch newAdventurer");
+
+      newAdventurer(state, currentPlayer);
+
+/*  Leave the old code in place, at least for now
       while(drawntreasure<2){
 	if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
 	  shuffle(currentPlayer, state);
@@ -685,9 +691,16 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
 	z=z-1;
       }
+*/
       return 0;
+
+
+
 			
     case council_room:
+
+      newCouncilRoom(state, currentPlayer, handPos);
+
       //+4 Cards
       for (i = 0; i < 4; i++)
 	{
@@ -829,6 +842,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case smithy:
+
+      printf("About to launch newSmithy");
+
+      newSmithy(state, currentPlayer, handPos);
+
+/*
       //+3 Cards
       for (i = 0; i < 3; i++)
 	{
@@ -837,9 +856,17 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 			
       //discard card from hand
       discardCard(handPos, currentPlayer, state, 0);
+*/
       return 0;
+
 		
     case village:
+
+      printf("About to launch newVillage");
+
+      newVillage(state, currentPlayer, handPos);
+
+/*
       //+1 Card
       drawCard(currentPlayer, state);
 			
@@ -848,7 +875,11 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 			
       //discard played card from hand
       discardCard(handPos, currentPlayer, state, 0);
+
+*/
       return 0;
+
+
 		
     case baron:
       state->numBuys++;//Increase buys by 1!
@@ -1105,6 +1136,10 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		
     case cutpurse:
 
+      printf("Executing new cutpurse function\n");
+
+      newCutpurse(state, currentPlayer, handPos);
+/*
       updateCoins(currentPlayer, state, 2);
       for (i = 0; i < state->numPlayers; i++)
 	{
@@ -1134,7 +1169,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
       //discard played card from hand
       discardCard(handPos, currentPlayer, state, 0);			
-
+*/
       return 0;
 
 		
@@ -1328,6 +1363,193 @@ int updateCoins(int player, struct gameState *state, int bonus)
   return 0;
 }
 
+// Note : as of 7/2 at 7:55 there are no bugs yet. This is the basic code
+
+void newAdventurer(struct gameState *state, int currentPlayer) {
+  int drawntreasure = 0;
+  int temphand[MAX_HAND];
+  int cardDrawn;
+  int z=0;
+
+  printf("Inside the newAdventurer function\n");
+
+  while(drawntreasure<2) {
+    if (state->deckCount[currentPlayer] < 1) {//if the deck is empty we need to shuffle discard and add to deck
+      shuffle(currentPlayer, state);
+    }
+    drawCard(currentPlayer, state);
+    cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer] -
+                                           1];//top card of hand is most recently drawn card.
+    if (cardDrawn == copper || cardDrawn == silver)
+      drawntreasure++;
+    else {
+      temphand[z] = cardDrawn;
+      state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
+      z++;
+    }
+  }
+
+  while(z-1>=0){
+    state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
+    z=z-1;
+  }
+
+
+  printf("Ending newAdventurer\n");
+//  return 0;
+
+}
+
+// Note : as of 7/2 at 7:55 there are no bugs yet. This is the basic code
+
+void newSmithy(struct gameState *state, int currentPlayer, int handPos) {
+
+  printf("Inside the newSmithy function\n");
+  int i;
+  int cardsRemaining = state->deckCount[currentPlayer]-1;
+
+  printf("Cards remaining = %i\n", cardsRemaining);
+
+  for (i = 0; i < 3; i++)
+  {
+    drawCard(currentPlayer, state);
+
+    int cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer] - 1];
+    cardsRemaining--;
+    printf("Cards remaining = %i\n", cardsRemaining);
+
+    if (cardDrawn == copper) {
+
+      if (cardsRemaining > 3 - i) {
+
+        discardCard(state->handCount[currentPlayer] - 1, currentPlayer, state, 0);
+        i--;
+        printf("Discarded!\n");
+
+      }
+
+      // If its a copper, discard it and take another one
+
+    }
+  }
+
+  //discard smithy card from hand
+  discardCard(handPos, currentPlayer, state, 0);
+  printf("Ending newSmithy\n");
+
+}
+
+
+void newVillage(struct gameState *state, int currentPlayer, int handPos) {
+  int i;
+  int cardsRemaining = state->deckCount[currentPlayer]-1;
+
+//  printf("Inside the newVillage function\n");
+//+1 Card
+
+  for (i = 0; i < 1; i++)
+  {
+  drawCard(currentPlayer, state);
+
+  int cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer] - 1];
+  cardsRemaining--;
+//  printf("Cards remaining = %i\n", cardsRemaining);
+
+  if (cardDrawn == copper) {
+    if (cardsRemaining > 1) {
+      discardCard(state->handCount[currentPlayer] - 1, currentPlayer, state, 0);
+      i--;
+//      printf("Discarded!\n");
+
+    }
+  }
+    // If its a copper, discard it and take another one
+  }
+
+//+2 Actions
+  state->numActions = state->numActions + 2;
+
+//+1 Buys
+  state->numActions = state->numBuys + 1;
+
+//+1 Coins
+  state->coins = state->coins + 1;
+
+//discard played card from hand
+  discardCard(handPos, currentPlayer, state, 0);
+  printf("Ending newVillage\n");
+
+}
+
+
+void newCutpurse(struct gameState *state, int currentPlayer, int handPos) {
+
+  printf("Inside the newCutpurse function\n");
+  int i,j,k;
+
+  updateCoins(currentPlayer, state, 2);
+  for (i = 0; i < state->numPlayers; i++)
+    {
+    if (i != currentPlayer)
+      {
+      for (j = 0; j < state->handCount[i]; j++)
+        {
+        if (state->hand[i][j] == copper)
+          {
+          discardCard(j, i, state, 0);
+          break;
+          }
+        if (j == state->handCount[i])
+        {
+          for (k = 0; k < state->handCount[i]; k++)
+            {
+              if (DEBUG)
+              printf("Player %d reveals card number %d\n", i, state->hand[i][k]);
+              }
+            break;
+          }
+        }
+
+      }
+
+    }
+
+  //discard played card from hand
+  discardCard(handPos, currentPlayer, state, 0);
+
+  printf("Ending newCutpurse\n");
+
+  }
+
+void newCouncilRoom(struct gameState *state, int currentPlayer, int handPos) {
+
+  printf("Inside the newCouncilRoom function\n");
+  int i;
+
+//+4 Cards
+  for (i = 0; i < 4; i++)
+    {
+    drawCard(currentPlayer, state);
+    }
+
+  //+1 Buy
+  state->numBuys++;
+
+  //Each other player draws a card
+  for (int i = 1; i < state->numPlayers; i++)
+    {
+      if ( i != currentPlayer )
+      {
+      drawCard(i, state);
+      }
+    }
+
+  //put played card in played card pile
+  discardCard(handPos, currentPlayer, state, 0);
+
+  printf("End of newCouncilRoom\n");
+
+}
 
 //end of dominion.c
 

@@ -668,7 +668,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     {
     case adventurer:
 
-      printf("About to launch newAdventurer");
+//      printf("About to launch newAdventurer");
 
       newAdventurer(state, currentPlayer);
 
@@ -701,7 +701,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
       newCouncilRoom(state, currentPlayer, handPos);
 
-      //+4 Cards
+/*      //+4 Cards
       for (i = 0; i < 4; i++)
 	{
 	  drawCard(currentPlayer, state);
@@ -721,9 +721,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 			
       //put played card in played card pile
       discardCard(handPos, currentPlayer, state, 0);
-			
+*/
       return 0;
-			
+
     case feast:
       //gain card with cost up to 5
       //Backup hand
@@ -843,7 +843,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		
     case smithy:
 
-      printf("About to launch newSmithy");
+//      printf("About to launch newSmithy");
 
       newSmithy(state, currentPlayer, handPos);
 
@@ -862,7 +862,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		
     case village:
 
-      printf("About to launch newVillage");
+//      printf("About to launch newVillage");
 
       newVillage(state, currentPlayer, handPos);
 
@@ -1371,7 +1371,7 @@ void newAdventurer(struct gameState *state, int currentPlayer) {
   int cardDrawn;
   int z=0;
 
-  printf("Inside the newAdventurer function\n");
+//  printf("Inside the newAdventurer function\n");
 
   while(drawntreasure<2) {
     if (state->deckCount[currentPlayer] < 1) {//if the deck is empty we need to shuffle discard and add to deck
@@ -1395,7 +1395,7 @@ void newAdventurer(struct gameState *state, int currentPlayer) {
   }
 
 
-  printf("Ending newAdventurer\n");
+//  printf("Ending newAdventurer\n");
 //  return 0;
 
 }
@@ -1404,11 +1404,11 @@ void newAdventurer(struct gameState *state, int currentPlayer) {
 
 void newSmithy(struct gameState *state, int currentPlayer, int handPos) {
 
-  printf("Inside the newSmithy function\n");
+//  printf("Inside the newSmithy function\n");
   int i;
   int cardsRemaining = state->deckCount[currentPlayer]-1;
 
-  printf("Cards remaining = %i\n", cardsRemaining);
+//    printf("Cards remaining = %i\n", cardsRemaining);
 
   for (i = 0; i < 3; i++)
   {
@@ -1416,7 +1416,7 @@ void newSmithy(struct gameState *state, int currentPlayer, int handPos) {
 
     int cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer] - 1];
     cardsRemaining--;
-    printf("Cards remaining = %i\n", cardsRemaining);
+//    printf("Cards remaining = %i\n", cardsRemaining);
 
     if (cardDrawn == copper) {
 
@@ -1424,7 +1424,7 @@ void newSmithy(struct gameState *state, int currentPlayer, int handPos) {
 
         discardCard(state->handCount[currentPlayer] - 1, currentPlayer, state, 0);
         i--;
-        printf("Discarded!\n");
+//        printf("Discarded!\n");
 
       }
 
@@ -1435,7 +1435,7 @@ void newSmithy(struct gameState *state, int currentPlayer, int handPos) {
 
   //discard smithy card from hand
   discardCard(handPos, currentPlayer, state, 0);
-  printf("Ending newSmithy\n");
+//  printf("Ending newSmithy\n");
 
 }
 
@@ -1477,7 +1477,7 @@ void newVillage(struct gameState *state, int currentPlayer, int handPos) {
 
 //discard played card from hand
   discardCard(handPos, currentPlayer, state, 0);
-  printf("Ending newVillage\n");
+//  printf("Ending newVillage\n");
 
 }
 
@@ -1523,7 +1523,7 @@ void newCutpurse(struct gameState *state, int currentPlayer, int handPos) {
 
 void newCouncilRoom(struct gameState *state, int currentPlayer, int handPos) {
 
-  printf("Inside the newCouncilRoom function\n");
+//  printf("Inside the newCouncilRoom function\n");
   int i;
 
 //+4 Cards
@@ -1534,6 +1534,9 @@ void newCouncilRoom(struct gameState *state, int currentPlayer, int handPos) {
 
   //+1 Buy
   state->numBuys++;
+
+  //+1 Actions
+  state->numActions++;
 
   //Each other player draws a card
   for (int i = 1; i < state->numPlayers; i++)
@@ -1547,7 +1550,7 @@ void newCouncilRoom(struct gameState *state, int currentPlayer, int handPos) {
   //put played card in played card pile
   discardCard(handPos, currentPlayer, state, 0);
 
-  printf("End of newCouncilRoom\n");
+//  printf("End of newCouncilRoom\n");
 
 }
 

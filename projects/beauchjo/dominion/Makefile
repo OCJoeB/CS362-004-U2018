@@ -33,6 +33,7 @@ unittestresults: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c car
 	gcc -o unittest1 -g unittest1.c dominion.c rngs.c $(CFLAGS)
 	unittest1 >> unittestresults.out
 	gcov dominion.c >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
 	echo "------------------------------------------------" >> unittestresults.out
 	echo "------------------------------------------------" >> unittestresults.out
 
@@ -40,6 +41,7 @@ unittestresults: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c car
 	gcc -o unittest2 -g unittest2.c dominion.c rngs.c $(CFLAGS)
 	unittest2 >> unittestresults.out
 	gcov dominion.c >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
 	echo "------------------------------------------------" >> unittestresults.out
 	
 	echo "------------------------------------------------" >> unittestresults.out
@@ -47,6 +49,7 @@ unittestresults: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c car
 	gcc -o unittest3 -g unittest3.c dominion.c rngs.c $(CFLAGS)
 	unittest3 >> unittestresults.out
 	gcov dominion.c >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
 	echo "------------------------------------------------" >> unittestresults.out
 
 	echo "------------------------------------------------" >> unittestresults.out
@@ -54,6 +57,7 @@ unittestresults: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c car
 	gcc -o unittest4 -g unittest4.c dominion.c rngs.c $(CFLAGS)
 	unittest4 >> unittestresults.out
 	gcov dominion.c >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
 	echo "------------------------------------------------" >> unittestresults.out
 
 	echo "------------------------------------------------" >> unittestresults.out
@@ -61,6 +65,7 @@ unittestresults: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c car
 	gcc -o cardtest1 -g cardtest1.c dominion.c rngs.c $(CFLAGS)
 	cardtest1 >> unittestresults.out
 	gcov dominion.c >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
 	echo "------------------------------------------------" >> unittestresults.out
 	
 	echo "------------------------------------------------" >> unittestresults.out
@@ -68,6 +73,7 @@ unittestresults: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c car
 	gcc -o cardtest2 -g cardtest2.c dominion.c rngs.c $(CFLAGS)
 	cardtest2 >> unittestresults.out
 	gcov dominion.c >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
 	echo "------------------------------------------------" >> unittestresults.out
 
 	echo "------------------------------------------------" >> unittestresults.out
@@ -75,13 +81,15 @@ unittestresults: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c car
 	gcc -o cardtest3 -g cardtest3.c dominion.c rngs.c $(CFLAGS)
 	cardtest3 >> unittestresults.out
 	gcov dominion.c >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
 	echo "------------------------------------------------" >> unittestresults.out
-
 	echo "------------------------------------------------" >> unittestresults.out
 	echo "cardtest4.c - newVillage tests::" >> unittestresults.out
 	gcc -o cardtest4 -g cardtest4.c dominion.c rngs.c $(CFLAGS)
 	cardtest4 >> unittestresults.out
 	gcov dominion.c >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+
 	echo "------------------------------------------------" >> unittestresults.out
 	echo "------------------------------------------------" >> unittestresults.out
 	echo "------------------------------------------------" >> unittestresults.out
@@ -92,7 +100,7 @@ interface.o: interface.h interface.c
 runtests: testDrawCard 
 	./testDrawCard &> unittestresult.out
 	gcov dominion.c >> unittestresult.out
-	cat dominion.c.gcov >> unittestresult.out
+
 
 
 player: player.c interface.o

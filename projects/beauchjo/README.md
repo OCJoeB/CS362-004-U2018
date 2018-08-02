@@ -1,2 +1,6 @@
-This is my assignment-2 submission. There are 5 refactored functions contained in dominion.c, 4 of which contain bugs. 
+This is my assignment-4 submission. There are 3 random test functions with their associated .out files. 
+
+These can be created by running the command "make randomtestresults" 
+
+Creates randomtestadventurer.out, randomtestcard1.out, and randomtestcard2.out
 

@@ -94,6 +94,26 @@ unittestresults: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c car
 	echo "------------------------------------------------" >> unittestresults.out
 	echo "------------------------------------------------" >> unittestresults.out
 
+randomtestresults: randomtestadventurer.c randomtestcard1.c randomtestcard2.c dominion.o rngs.o
+
+	echo "randomtestadventurer.c tests:" >> randomtestadventurer.out
+	gcc -o randomtestadventurer -g randomtestadventurer.c dominion.c rngs.c $(CFLAGS)
+	randomtestadventurer >> randomtestadventurer.out
+	gcov -b dominion.c >> randomtestadventurer.out
+	cat dominion.c.gcov >> randomtestadventurer.out
+
+	echo "randomtestcard1.c tests:" >> randomtestcard1.out
+	gcc -o randomtestcard1 -g randomtestcard1.c dominion.c rngs.c $(CFLAGS)
+	randomtestcard1 >> randomtestcard1.out
+	gcov -b dominion.c >> randomtestcard1.out
+	cat dominion.c.gcov >> randomtestcard1.out
+	
+	echo "randomtestcard2.c tests:" >> randomtestcard2.out
+	gcc -o randomtestcard2 -g randomtestcard2.c dominion.c rngs.c $(CFLAGS)
+	randomtestcard2 >> randomtestcard2.out
+	gcov -b dominion.c >> randomtestcard2.out
+	cat dominion.c.gcov >> randomtestcard2.out
+
 interface.o: interface.h interface.c
 	gcc -c interface.c -g  $(CFLAGS)
 

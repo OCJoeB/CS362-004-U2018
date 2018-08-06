@@ -113,7 +113,7 @@ int main() {
                 endTurn(&G);
 //                printf("Ran endTurn\n");
             }
-
+/*
         for (j = 0; j < maxHandCount; j++) {
             G.deck[player][j] = estate;
         }
@@ -199,7 +199,8 @@ int main() {
             testResult =0;
             testCaseResult =0;
         }
-
+*/
+/*
     // All copper card test
 
         printf ("TESTING newAdventurer() - copper test:\n");
@@ -428,7 +429,8 @@ int main() {
             testCaseResult =0;
             testResult =0;
         }
-
+*/
+/*
 // One treasure card test
 
             printf ("TESTING newAdventurer() - Fewer than treasure cards case :\n");
@@ -448,6 +450,84 @@ int main() {
 
 #if (NOISY_TEST == 1)
     printf("deck card zero = %d\n", G.deck[player][0]);
+    printf("hand card zero = %d\n", G.deck[player][0]);
+    printf("deckCount = %d\n", G.deckCount[player]);
+    printf("handCount = %d\n", G.handCount[player]);
+#endif
+
+            newAdventurer(&G, player);
+
+#if (NOISY_TEST == 1)
+            printf("deck card zero = %d\n", G.deck[player][0]);
+    printf("hand card zero = %d\n", G.deck[player][0]);
+    printf("deckCount = %d\n", G.deckCount[player]);
+    printf("handCount = %d\n", G.handCount[player]);
+#endif
+            testResult += testAssert(G.handCount[player], Gcopy.handCount[player]+1, &totalTestCount);
+            testResult += testAssert(G.deckCount[player], 0, &totalTestCount);
+            testResult += testAssert(G.supplyCount[copper], Gcopy.supplyCount[copper], &totalTestCount);
+            if (testResult <= -1) {
+                printf("card count checks failed\n");
+                testResult = 0;
+                testCaseResult = -1;
+            }
+            testResult += testAssert(G.coins, Gcopy.coins, &totalTestCount);
+            if (testResult <= -1) {
+                printf("coins check failed\n");
+                testResult =0;
+                testCaseResult = -1;
+            }
+            testResult += testAssert(G.numBuys, Gcopy.numBuys, &totalTestCount);
+            if (testResult <= -1) {
+                printf("numBuys check failed\n");
+                testResult =0;
+                testCaseResult = -1;
+            }
+            testResult += testAssert(G.numActions, Gcopy.numActions, &totalTestCount);
+            if (testResult <= -1) {
+                printf("numActions check failed\n");
+                testResult =0;
+                testCaseResult = -1;
+            }
+
+            for (l=0; l<numPlayer; l++) {
+                if (l !=player) {
+                    testResult += testAssert(G.deckCount[l], Gcopy.deckCount[l], &totalTestCount);
+                    testResult += testAssert(G.handCount[l], Gcopy.handCount[l], &totalTestCount);
+                    testResult += testAssert(G.discardCount[l], Gcopy.discardCount[l], &totalTestCount);
+                }
+            }
+
+
+            if (testCaseResult >= 0) {
+                printf("The One treasure card case passed - player %d\n", player);
+            } else {
+                printf("The One treasure card case failed! - player %d\n", player);
+                totalTestResult = -1;
+                testResult =0;
+                testCaseResult = 0;
+            }
+*/
+// Two treasure card test - one gold, one copper
+
+            printf ("TESTING newAdventurer() - Fewer than treasure cards case :\n");
+
+            memset(&G, 23, sizeof(struct gameState));   // clear the game state
+            memset(&Gcopy, 23, sizeof(struct gameState));   // clear the game state
+            r = initializeGame(numPlayer, k, seed, &G); // initialize a new game
+
+            for (int k=0; k<player; k++) {
+                endTurn(&G);
+            }
+            for (j = 1; j < maxHandCount; j++) {
+                G.deck[player][j] = estate;
+            }
+            G.deck[player][0] = copper; // Set card [0] to a copper
+            G.deck[player][5] = gold; // Set card [0] to a gold
+            memcpy(&Gcopy, &G, sizeof(struct gameState));
+
+#if (NOISY_TEST == 1)
+            printf("deck card zero = %d\n", G.deck[player][0]);
     printf("hand card zero = %d\n", G.deck[player][0]);
     printf("deckCount = %d\n", G.deckCount[player]);
     printf("handCount = %d\n", G.handCount[player]);
